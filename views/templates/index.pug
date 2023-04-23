@@ -2,9 +2,11 @@ extends ../layout/index
 block contenido 
     div.grid.grid-cols-2.gap-4.items-center.mb-3
         button(class="w-1/3 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded col-span-1" type="button" onclick="window.location.href='/subir-archivos/save'") Añadir registro
-        form(action="/subir-archivos/" method="get" class="col-span-1 grid grid-cols-4 gap-2 items-center")
-            input(type="date" name="fechaInicio" value=fechaInicio class="col-span-1")
-            input(type="date" name="fechaFin" value=fechaFin class="col-span-1")
+        form(action="/subir-archivos/" method="get" class="col-span-1 grid grid-cols-5 gap-2 items-center")
+            label Desde:
+                input(type="date" name="fechaInicio" value=fechaInicio class="col-span-1")
+            label Hasta:
+                input(type="date" name="fechaFin" value=fechaFin class="col-span-1")
             div.flex.items-center.border-b.border-teal-500.py-2.col-span-1
                 input(class="w-full h-full px-2 text-indigo-700 leading-tight focus:outline-none focus:shadow-outline" type='search' placeholder='Search' name="search" value=search class="col-span-2")
             button( class = "w-full bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded col-span-1" type="submit") Buscar registros
