@@ -3,6 +3,7 @@ import multer from "multer";
 import { Op } from 'sequelize';
 import { Producto, Registro, Usuario } from '../models/index.js';
 import csv from 'csvtojson'
+import moment from 'moment-timezone';
 
 const datosRegistros = async (req, res) => {
     const { fechaInicio, fechaFin, search } = req.query
@@ -37,7 +38,8 @@ const buscarRegistros = async (fechaInicio, fechaFin, search) => {
             where: {
                 [Op.and]: [{
                     createdAt: {
-                        [Op.between]: [fechaInicio, fechaFin]
+                        [Op.gte]: `${fechaInicio} 00:00:00`,
+                        [Op.lte]: `${fechaFin} 23:59:59`
                     }
                 },
                 {
@@ -54,7 +56,8 @@ const buscarRegistros = async (fechaInicio, fechaFin, search) => {
         registros = await Registro.findAndCountAll({
             where: {
                 createdAt: {
-                    [Op.between]: [fechaInicio, fechaFin]
+                    [Op.gte]: `${fechaInicio} 00:00:00`,
+                    [Op.lte]: `${fechaFin} 23:59:59`
                 }
             }
         });
@@ -70,7 +73,7 @@ const buscarRegistros = async (fechaInicio, fechaFin, search) => {
         });
     }
 
-    return {count: registros.count, rows: registros.rows};
+    return { count: registros.count, rows: registros.rows };
 };
 
 const formularioRegistros = (req, res) => {
@@ -153,8 +156,11 @@ const subirArchivo = async (req, res) => {
             response.forEach(async (element) => {
 
                 let idProducto;
-                const fecha = new Date();
-                const fechaActualFormateada = fecha.toISOString().slice(0, 19).replace('T', ' ');
+
+                moment.tz.setDefault('America/Bogota');
+
+                const fechaActual = moment();
+                const fechaActualFormateada = fechaActual.format('YYYY-MM-DD HH:mm:ss');
 
                 if (element.producto) {
                     const existeProducto = await Producto.findOne({ where: { nombre: element.producto } });
