@@ -1,28 +1,97 @@
-import { validationResult } from 'express-validator'
-import { Producto, Registro, Usuario } from '../models/index.js';
+import { validationResult } from 'express-validator';
+import multer from "multer";
 import { Op } from 'sequelize';
+import { Producto, Registro, Usuario } from '../models/index.js';
 import csv from 'csvtojson'
 
 const datosRegistros = async (req, res) => {
+    const { fechaInicio, fechaFin, search } = req.query
 
-    const registros = await Registro.findAll();
-    const total_registros = await Registro.count();
+    let registros = await Registro.findAndCountAll();
+
+    if (fechaInicio && fechaFin && search) {
+        const registros_fecha = await buscarRegistros(fechaInicio, fechaFin, search);
+        registros = registros_fecha
+    }
+    if (fechaInicio && fechaFin || search) {
+        const registros_fecha = await buscarRegistros(fechaInicio, fechaFin, search);
+        registros = registros_fecha
+    }
 
     res.render('templates/index', {
         pagina: 'Datos registros',
         barra: true,
-        registros,
-        total_registros
+        registros: registros.rows,
+        totalRegistros: registros.count,
+        fechaInicio,
+        fechaFin,
+        search
     });
 }
 
-const formularioRegistros = async (req, res) => {
+const buscarRegistros = async (fechaInicio, fechaFin, search) => {
+    let registros;
+
+    if (fechaInicio && fechaFin && search) {
+        registros = await Registro.findAndCountAll({
+            where: {
+                [Op.and]: [{
+                    createdAt: {
+                        [Op.between]: [fechaInicio, fechaFin]
+                    }
+                },
+                {
+                    nombre: {
+                        [Op.like]: `${search}`,
+                    }
+                }
+                ]
+            }
+        });
+    }
+
+    if (fechaInicio && fechaFin && !search) {
+        registros = await Registro.findAndCountAll({
+            where: {
+                createdAt: {
+                    [Op.between]: [fechaInicio, fechaFin]
+                }
+            }
+        });
+    }
+
+    if (!fechaInicio && !fechaFin && search) {
+        registros = await Registro.findAndCountAll({
+            where: {
+                nombre: {
+                    [Op.like]: `${search}`,
+                }
+            }
+        });
+    }
+
+    return {count: registros.count, rows: registros.rows};
+};
+
+const formularioRegistros = (req, res) => {
     res.render('templates/admin', {
         pagina: 'Realizar registro',
         barra: true,
         datos: {}
     });
 }
+
+var storage = multer.diskStorage({
+    // destination: (req, file, cb) => {
+    //     cb(null, './public/uploads');
+    // },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname)
+    }
+})
+
+const upload = multer({ storage });
+
 
 function validarArchivo(archivo) {
     const tiposValidos = ['txt', 'csv'];
@@ -62,24 +131,40 @@ const guardar = async (req, res) => {
 }
 
 const subirArchivo = async (req, res) => {
-
     try {
+        const opcionesSeleccionadas = req.body.options;
+
+        if (!opcionesSeleccionadas) {
+            return res.render('templates/admin', {
+                pagina: 'Realizar registro',
+                barra: true,
+                errores: [{ msg: 'Debe seleccionar por lo menos un campo' }],
+                datos: req.body
+            });
+        }
+
+        const regex = new RegExp(opcionesSeleccionadas.join('|'));
+
         csv({
-            delimiter: [',', ' ', '$', '|', '%']
+            delimiter: [',', ' ', '$', '|', '%'],
+            includeColumns: regex
         }).fromFile(req.file.path).then(async (response) => {
 
             response.forEach(async (element) => {
 
+                let idProducto;
                 const fecha = new Date();
                 const fechaActualFormateada = fecha.toISOString().slice(0, 19).replace('T', ' ');
 
-                const existeProducto = await Producto.findOne({ where: { nombre: element.producto } });
-                if (!existeProducto) {
-                    await Producto.create({
-                        nombre: element.producto
-                    });
+                if (element.producto) {
+                    const existeProducto = await Producto.findOne({ where: { nombre: element.producto } });
+                    if (!existeProducto || existeProducto == null) {
+                        await Producto.create({
+                            nombre: element.producto
+                        });
+                    }
+                    idProducto = await Producto.findOne({ where: { nombre: element.producto } });
                 }
-                const idProducto = await Producto.findOne({ where: { nombre: element.producto } });
                 const idUsuario = await Usuario.findOne({ where: { email: req.cookies.usuario } });
 
                 await Registro.create({
@@ -90,7 +175,7 @@ const subirArchivo = async (req, res) => {
                     createdAt: fechaActualFormateada,
                     updatedAt: fechaActualFormateada,
                     usuarioId: idUsuario.id,
-                    productoId: idProducto.id
+                    productoId: idProducto ? idProducto.id : null
                 });
             });
 
@@ -101,4 +186,4 @@ const subirArchivo = async (req, res) => {
     }
 }
 
-export { datosRegistros,validarArchivo, formularioRegistros, guardar, subirArchivo }
+export { datosRegistros, validarArchivo, formularioRegistros, upload, guardar, subirArchivo }

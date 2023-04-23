@@ -16,24 +16,34 @@ block contenido
 
         .mt-8.mx-auto.max-w-md 
             .bg-white.py-8.px-4.shadow
-                form.space-y-5(method='POST' action="/subir-archivos/save-file" enctype="multipart/form-data")
-                    div 
-                        input(type="checkbox" id="nombre" name="nombre" value="nombre") 
-                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="nombre") Nombre
-                        input(type="checkbox" id="apellido" name="apellido" value="apellido") 
-                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="apellido") Apellido
-                        input(type="checkbox" id="telefono" name="telefono" value="telefono") 
-                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="telefono") Telefono
-                        input(type="checkbox" id="direccion" name="direccion" value="direccion") 
-                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="direccion") Direccion
-                        input(type="checkbox" id="producto" name="producto" value="producto") 
-                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="producto") Producto
-                        input(type="checkbox" id="usuario" name="usuario" value="usuario") 
-                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="usuario") Usuario
-                        input(type="checkbox" id="area" name="area" value="area") 
-                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="area") Area
+                button(class=" bg-indigo-500 hover:bg-indigo-700 text-white font-bold mb-2 py-2 px-4 rounded" type="button", onclick="window.location.href='/subir-archivos/'") Volver
+                form.space-y-5(method='POST' action="/subir-archivos/save" enctype="multipart/form-data")
+                    div.grid.grid-cols-3.grid-rows-2.gap-4
+                        div.inline-flex.items-center.mb-2
+                            input(type="checkbox" id="nombre" name="options[]" value="nombre") 
+                            label.block.text-sm.uppercase.text-gray-500.font-bold(for="nombre") Nombre
+                        div.inline-flex.items-center.mb-2
+                            input(type="checkbox" id="apellido" name="options[]" value="apellido") 
+                            label.block.text-sm.uppercase.text-gray-500.font-bold(for="apellido") Apellido
+                        div.inline-flex.items-center.mb-2
+                            input(type="checkbox" id="telefono" name="options[]" value="telefono") 
+                            label.block.text-sm.uppercase.text-gray-500.font-bold(for="telefono") Telefono
+                        div.inline-flex.items-center.mb-2
+                            input(type="checkbox" id="direccion" name="options[]" value="direccion") 
+                            label.block.text-sm.uppercase.text-gray-500.font-bold(for="direccion") Direccion
+                        div.inline-flex.items-center.mb-2
+                            input(type="checkbox" id="producto" name="options[]" value="producto") 
+                            label.block.text-sm.uppercase.text-gray-500.font-bold(for="producto") Producto
 
                     div 
                         input(type="file" name="file" id="file" required )
 
-                    input(class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 cursor-pointer" type="submit" value="Enviar")
+                    input(class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 cursor-pointer" id="subir-archivo" type="submit" value="Enviar")
+                    script.
+                        function enviarDatos(event) {
+                            event.preventDefault();
+                            var btnSubmit = document.getElementById("subir-archivo");
+                            btnSubmit.disabled = true;
+                        }
+
+                    

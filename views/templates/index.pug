@@ -1,27 +1,36 @@
 extends ../layout/index
 block contenido 
+    div.grid.grid-cols-2.gap-4.items-center.mb-3
+        button(class="w-1/3 bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded col-span-1" type="button" onclick="window.location.href='/subir-archivos/save'") Añadir registro
+        form(action="/subir-archivos/" method="get" class="col-span-1 grid grid-cols-4 gap-2 items-center")
+            input(type="date" name="fechaInicio" value=fechaInicio class="col-span-1")
+            input(type="date" name="fechaFin" value=fechaFin class="col-span-1")
+            div.flex.items-center.border-b.border-teal-500.py-2.col-span-1
+                input(class="w-full h-full px-2 text-indigo-700 leading-tight focus:outline-none focus:shadow-outline" type='search' placeholder='Search' name="search" value=search class="col-span-2")
+            button( class = "w-full bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded col-span-1" type="submit") Buscar registros
     div.mx-auto.flex.justify-center.items-center.overflow-x-auto
-      table.w-full.bg-gray-100.rounded-lg.shadow-md.overflow-hidden
-        thead
-            tr.bg-gray-200.text-gray-600.uppercase.text-sm.leading-normal
-                th.text-left.py-3.px-4 Id
-                th.text-left.py-3.px-4 Nombre
-                th.text-left.py-3.px-4 Apellido
-                th.text-left.py-3.px-4 Telefono
-                th.text-left.py-3.px-4 Direccion
-                th.text-left.py-3.px-4 Usuario
-                th.text-left.py-3.px-4 Producto 
-                th.text-left.py-3.px-4 Creado
-                th.text-left.py-3.px-4 Actualizado
-            each registro in registros
-                tr.bg-gray-50.text-gray-700
-                    td.py-3.px-4.text-left= registro.id 
-                    td.py-3.px-4.text-left= registro.nombre 
-                    td.py-3.px-4.text-left= registro.apellido 
-                    td.py-3.px-4.text-left= registro.telefono 
-                    td.py-3.px-4.text-left= registro.direccion 
-                    td.py-3.px-4.text-left= registro.usuarioId
-                    td.py-3.px-4.text-left= registro.productoId
-                    td.py-3.px-4.text-left= registro.createdAt.toLocaleString('en-EN')
-                    td.py-3.px-4.text-left= registro.updatedAt.toLocaleString('en-EN')
-    label(for="total_registros") Total de registros: #{total_registros}
+        table.w-full.bg-gray-100.rounded-lg.shadow-md.overflow-hidden
+            thead
+                tr.bg-gray-200.text-gray-600.uppercase.text-sm.leading-normal
+                    th.text-left.py-3.px-4 Id
+                    th.text-left.py-3.px-4 Nombre
+                    th.text-left.py-3.px-4 Apellido
+                    th.text-left.py-3.px-4 Telefono
+                    th.text-left.py-3.px-4 Direccion
+                    th.text-left.py-3.px-4 Usuario
+                    th.text-left.py-3.px-4 Producto 
+                    th.text-left.py-3.px-4 Creado
+                    th.text-left.py-3.px-4 Actualizado
+                each registro in registros
+                    tr.bg-gray-50.text-gray-700
+                        td.py-3.px-4.text-left= registro.id || 'Campo Vacio'
+                        td.py-3.px-4.text-left= registro.nombre || 'Campo Vacio'
+                        td.py-3.px-4.text-left= registro.apellido || 'Campo Vacio'
+                        td.py-3.px-4.text-left= registro.telefono || 'Campo Vacio'
+                        td.py-3.px-4.text-left= registro.direccion || 'Campo Vacio'
+                        td.py-3.px-4.text-left= registro.usuarioId || 'Campo Vacio'
+                        td.py-3.px-4.text-left= registro.productoId || 'Campo Vacio'
+                        td.py-3.px-4.text-left= registro.createdAt.toLocaleString('es-ES')
+                        td.py-3.px-4.text-left= registro.updatedAt.toLocaleString('es-ES')
+
+    label(for="total_registros") Total de registros: #{totalRegistros}

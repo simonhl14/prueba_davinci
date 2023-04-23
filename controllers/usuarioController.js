@@ -49,7 +49,6 @@ const formularioRegistro = async (req, res) => {
         Area.findAll()
     ]);
 
-    console.log(areas);
     res.render('auth/registro', {
         pagina: 'Crear Cuenta',
         areas,

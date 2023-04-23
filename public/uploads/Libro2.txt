@@ -1,4 +1,0 @@
-nombre apellido telefono direccion producto usuario area
-Simon1 Hernandez1 3174965575 aaaaaa1 product2 Simon1 Mercadeo2
-Simon2 Hernandez2 3174965575 aaaaaa2 product22 Simon2 Mercadeo22
-Simon23 Hernandez23 3174965575 aaaaaa23 product223 Simon23 Mercadeo223

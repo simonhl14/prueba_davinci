@@ -5,9 +5,9 @@ header.bg-indigo-600.p-4
 
         nav(class="my-5 text-sm md:flex md:items-center md:gap-3 font-bold text-white hidden")
             if barra
-                a(href="") Admin 
-                a(href="") Mi perfil  
-                a(class="bg-indigo-800 py-2 px-10 rounded-lg" href="") Cerrar sesion 
+                a(href="/subir-archivos/") Ver registros 
+                a(href="/subir-archivos/save") Añadir registros  
+                a(class="bg-indigo-800 py-2 px-10 rounded-lg" href="/auth/login") Cerrar sesion 
             else 
                 a(class="bg-indigo-800 py-2 px-10 rounded-lg" href="/auth/login") Iniciar sesion 
                 a(class="bg-indigo-800 py-2 px-10 rounded-lg" href="/auth/registro") Registrarse
