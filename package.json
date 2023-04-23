@@ -1,7 +1,7 @@
 {
   "name": "prueba",
   "version": "1.0.0",
-  "description": "",
+  "description": "Correr proyecto: npm run start | nodemon run serve\r Compilar css: npm run css",
   "main": "index.js",
   "type": "module",
   "scripts": {

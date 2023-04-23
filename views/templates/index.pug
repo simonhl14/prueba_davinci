@@ -28,8 +28,8 @@ block contenido
                         td.py-3.px-4.text-left= registro.apellido || 'Campo Vacio'
                         td.py-3.px-4.text-left= registro.telefono || 'Campo Vacio'
                         td.py-3.px-4.text-left= registro.direccion || 'Campo Vacio'
-                        td.py-3.px-4.text-left= registro.usuario.nombre || 'Campo Vacio'
-                        td.py-3.px-4.text-left= registro.producto.nombre || 'Campo Vacio'
+                        td.py-3.px-4.text-left= registro.usuario ? registro.usuario.nombre : 'Campo Vacio'
+                        td.py-3.px-4.text-left= registro.producto ? registro.producto.nombre : 'Campo Vacio'
                         td.py-3.px-4.text-left= registro.createdAt.toLocaleString('es-ES')
                         td.py-3.px-4.text-left= registro.updatedAt.toLocaleString('es-ES')
     div.mx-auto
