@@ -1,14 +1,23 @@
-import { validationResult } from 'express-validator';
-import multer from "multer";
-import { Op } from 'sequelize';
-import { Producto, Registro, Usuario } from '../models/index.js';
 import csv from 'csvtojson'
+import multer from "multer";
 import moment from 'moment-timezone';
+import { Op } from 'sequelize';
+import { validationResult } from 'express-validator';
+import { Producto, Registro, Usuario } from '../models/index.js';
 
 const datosRegistros = async (req, res) => {
     const { fechaInicio, fechaFin, search } = req.query
 
-    let registros = await Registro.findAndCountAll();
+    let registros = await Registro.findAndCountAll({
+        include: [{
+            model: Usuario,
+            attributes: ['nombre']
+        },
+        {
+            model: Producto,
+            attributes: ['nombre']
+        }]
+    });
 
     if (fechaInicio && fechaFin && search) {
         const registros_fecha = await buscarRegistros(fechaInicio, fechaFin, search);
@@ -35,6 +44,14 @@ const buscarRegistros = async (fechaInicio, fechaFin, search) => {
 
     if (fechaInicio && fechaFin && search) {
         registros = await Registro.findAndCountAll({
+            include: [{
+                model: Usuario,
+                attributes: ['nombre']
+            },
+            {
+                model: Producto,
+                attributes: ['nombre']
+            }],
             where: {
                 [Op.and]: [{
                     createdAt: {
@@ -54,6 +71,14 @@ const buscarRegistros = async (fechaInicio, fechaFin, search) => {
 
     if (fechaInicio && fechaFin && !search) {
         registros = await Registro.findAndCountAll({
+            include: [{
+                model: Usuario,
+                attributes: ['nombre']
+            },
+            {
+                model: Producto,
+                attributes: ['nombre']
+            }],
             where: {
                 createdAt: {
                     [Op.gte]: `${fechaInicio} 00:00:00`,
@@ -63,8 +88,16 @@ const buscarRegistros = async (fechaInicio, fechaFin, search) => {
         });
     }
 
-    if (!fechaInicio && !fechaFin && search) {
+    if ((!fechaInicio || !fechaFin) && search) {
         registros = await Registro.findAndCountAll({
+            include: [{
+                model: Usuario,
+                attributes: ['nombre']
+            },
+            {
+                model: Producto,
+                attributes: ['nombre']
+            }],
             where: {
                 nombre: {
                     [Op.like]: `${search}`,

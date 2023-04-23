@@ -15,8 +15,8 @@ block contenido
                     p.bg-green-600.text-white.uppercase.text-xs.text-center.p-2.mb-1.font-bold= mensaje.msg
 
         .mt-8.mx-auto.max-w-md 
+            button(class=" bg-indigo-500 hover:bg-indigo-700 text-white font-bold mb-2 py-2 px-4 rounded" type="button", onclick="window.location.href='/subir-archivos/'") Volver
             .bg-white.py-8.px-4.shadow
-                button(class=" bg-indigo-500 hover:bg-indigo-700 text-white font-bold mb-2 py-2 px-4 rounded" type="button", onclick="window.location.href='/subir-archivos/'") Volver
                 form.space-y-5(method='POST' action="/subir-archivos/save" enctype="multipart/form-data")
                     div.grid.grid-cols-3.grid-rows-2.gap-4
                         div.inline-flex.items-center.mb-2
