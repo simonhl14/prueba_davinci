@@ -1,0 +1,39 @@
+extends ../layout/index
+block contenido 
+    div.py-2
+        h1.text-4xl.my-10.font-extrabold.text-center Prueba
+            span.font-normal davinci
+        h2.text-center.text-2xl.font-extrabold= pagina
+
+        if errores
+            div(class="max-w-md mx-auto my-10")
+                each error in errores
+                    p.bg-red-600.text-white.uppercase.text-xs.text-center.p-2.mb-1.font-bold= error.msg
+        if msg
+            div(class="max-w-md mx-auto my-10")
+                each mensaje in msg
+                    p.bg-green-600.text-white.uppercase.text-xs.text-center.p-2.mb-1.font-bold= mensaje.msg
+
+        .mt-8.mx-auto.max-w-md 
+            .bg-white.py-8.px-4.shadow
+                form.space-y-5(method='POST' action="/subir-archivos/save-file" enctype="multipart/form-data")
+                    div 
+                        input(type="checkbox" id="nombre" name="nombre" value="nombre") 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="nombre") Nombre
+                        input(type="checkbox" id="apellido" name="apellido" value="apellido") 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="apellido") Apellido
+                        input(type="checkbox" id="telefono" name="telefono" value="telefono") 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="telefono") Telefono
+                        input(type="checkbox" id="direccion" name="direccion" value="direccion") 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="direccion") Direccion
+                        input(type="checkbox" id="producto" name="producto" value="producto") 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="producto") Producto
+                        input(type="checkbox" id="usuario" name="usuario" value="usuario") 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="usuario") Usuario
+                        input(type="checkbox" id="area" name="area" value="area") 
+                        label.block.text-sm.uppercase.text-gray-500.mb-2.font-bold(for="area") Area
+
+                    div 
+                        input(type="file" name="file" id="file" required )
+
+                    input(class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 cursor-pointer" type="submit" value="Enviar")

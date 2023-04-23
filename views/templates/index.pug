@@ -1,0 +1,27 @@
+extends ../layout/index
+block contenido 
+    div.mx-auto.flex.justify-center.items-center.overflow-x-auto
+      table.w-full.bg-gray-100.rounded-lg.shadow-md.overflow-hidden
+        thead
+            tr.bg-gray-200.text-gray-600.uppercase.text-sm.leading-normal
+                th.text-left.py-3.px-4 Id
+                th.text-left.py-3.px-4 Nombre
+                th.text-left.py-3.px-4 Apellido
+                th.text-left.py-3.px-4 Telefono
+                th.text-left.py-3.px-4 Direccion
+                th.text-left.py-3.px-4 Usuario
+                th.text-left.py-3.px-4 Producto 
+                th.text-left.py-3.px-4 Creado
+                th.text-left.py-3.px-4 Actualizado
+            each registro in registros
+                tr.bg-gray-50.text-gray-700
+                    td.py-3.px-4.text-left= registro.id 
+                    td.py-3.px-4.text-left= registro.nombre 
+                    td.py-3.px-4.text-left= registro.apellido 
+                    td.py-3.px-4.text-left= registro.telefono 
+                    td.py-3.px-4.text-left= registro.direccion 
+                    td.py-3.px-4.text-left= registro.usuarioId
+                    td.py-3.px-4.text-left= registro.productoId
+                    td.py-3.px-4.text-left= registro.createdAt.toLocaleString('en-EN')
+                    td.py-3.px-4.text-left= registro.updatedAt.toLocaleString('en-EN')
+    label(for="total_registros") Total de registros: #{total_registros}
